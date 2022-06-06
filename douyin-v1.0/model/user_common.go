@@ -3,14 +3,17 @@ package model
 import "time"
 
 type User struct {
-	Id            int64     `gorm:"column:user_id" json:"id,omitempty"`
-	Username      string    `gorm:"column:user_name" json:"username,omitempty"`
-	Password      string    `json:"password,omitempty"`
-	Salt          string    `json:"salt,omitempty"`
-	Followcount   int64     `gorm:"column:follow_count" json:"followcount,omitempty"`
-	Followercount int64     `gorm:"column:follower_count" json:"followercount,omitempty"`
-	CreateTime    time.Time `json:"createTime,omitempty"`
-	IsFollow      bool   `gorm:"-" json:"is_follow,omitempty"`
+	Id              int64     `gorm:"column:user_id" json:"id,omitempty"`
+	Username        string    `gorm:"column:user_name" json:"username,omitempty"`
+	Password        string    `json:"password,omitempty"`
+	Salt            string    `json:"salt,omitempty"`
+	Followcount     int64     `gorm:"column:follow_count" json:"followcount,omitempty"`
+	Followercount   int64     `gorm:"column:follower_count" json:"followercount,omitempty"`
+	CreateTime      time.Time `json:"createTime,omitempty"`
+	Avatar          string    `gorm:"column:avatar" json:"avatar,omitempty"`
+	Signature       string    `gorm:"column:signature" json:"signature,omitempty"`
+	BackgroundImage string    `gorm:"column:background_image" json:"backgroundImage,omitempty"`
+	IsFollow        bool      `gorm:"-" json:"is_follow,omitempty"`
 }
 
 func (du *User) TableName() string {
@@ -41,13 +44,26 @@ func (u *User) SetCreateTime(createTime time.Time) {
 	u.CreateTime = createTime
 }
 
+func (u *User) SetAvatar(avatar string) {
+	u.Avatar = avatar
+}
+
+func (u *User) SetSignature(signature string) {
+	u.Signature = signature
+}
+
+func (u *User) SetBackgroundImage(backgroundImage string) {
+	u.BackgroundImage = backgroundImage
+}
+
 type LoginTicket struct {
 	Id      int64     `json:"id,omitempty"`
-	UserId  int64     `json:"username,omitempty"`
-	Ticket  string    `json:"password,omitempty"`
-	Status  int       `json:"salt,omitempty"`
-	Expired time.Time `json:"email,omitempty"`
+	UserId  int64     `json:"userId,omitempty"`
+	Ticket  string    `json:"token,omitempty"`
+	Status  int       `json:"status,omitempty"`
+	Expired time.Time `json:"expired,omitempty"`
 }
+
 //func (du *LoginTicket)TableName() (string) {
 //	return "login_ticket"
 //}

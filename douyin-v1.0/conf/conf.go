@@ -2,6 +2,8 @@ package conf
 
 import (
 	"fmt"
+	"github.com/garyburd/redigo/redis"
+	"time"
 )
 
 // HostAndPort 获得主机ip和端口，供存储视频的url使用
@@ -24,4 +26,35 @@ func Init() {
 	)
 
 	Database(MysqlDsn)
+}
+
+// InitRedis ...
+func InitRedis(host string, passwd string) error {
+	var pool = &redis.Pool{
+		MaxIdle:     50,
+		MaxActive:   100,
+		IdleTimeout: 240 * time.Second,
+		Dial: func() (redis.Conn, error) {
+			c, err := redis.Dial("tcp", host)
+			if err != nil {
+				return nil, err
+			}
+			if passwd != "" {
+				if _, err := c.Do("AUTH", passwd); err != nil {
+					c.Close()
+					return nil, err
+				}
+			}
+			return c, err
+		},
+		// custom connection test method
+		TestOnBorrow: func(c redis.Conn, t time.Time) error {
+			if _, err := c.Do("PING"); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	RedisConn = &RedisConnc{pool}
+	return nil
 }

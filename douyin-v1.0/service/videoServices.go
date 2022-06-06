@@ -44,7 +44,8 @@ func GetVideosByUserId(userId int64) ([]model.Video, error) {
 			return nil, err
 		}
 		// 获得作者信息，作者不能自己关注自己
-		author := model.User{Id: databaseUser.Id,
+		author := model.User{
+			Id:            databaseUser.Id,
 			Username:      databaseUser.Name,
 			Followcount:   databaseUser.FollowCount,
 			Followercount: databaseUser.FollowerCount,

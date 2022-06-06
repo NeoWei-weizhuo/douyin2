@@ -69,7 +69,7 @@ func UpdatePassword(id int64, password string) int {
 	db := conf.DB
 	var user *model.User
 
-	err := db.Model(&user).Where("user_id = ?", id).Update("password",password)
+	err := db.Model(&user).Where("user_id = ?", id).Update("password", password)
 	if err != nil {
 		fmt.Printf("update failed, err: %v\n", err)
 		return 0
@@ -93,7 +93,10 @@ func UpdatePassword(id int64, password string) int {
 func InsertUser(user *model.User) int64 {
 
 	db := conf.DB
-	db.Create(user)
+	err := db.Create(user).Error
+	if err != nil {
+		fmt.Printf("注册中插入用户失败，err：%v\n", err)
+	}
 	return user.Id
 	//sqlStr := "insert into user_t (user_name,password,follow_count,follower_count,salt,create_time) " +
 	//	"values(?,?,?,?,?,?)"
